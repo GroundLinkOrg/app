@@ -1,13 +1,13 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="utf-8" />
-    <!-- CSP: no inline/remote scripts (Vite module scripts are external);
+    <!-- CSP: no inline/remote scripts (Vite module scripts are external); 'wasm-unsafe-eval' lets the local ITM WebAssembly compile (M56 phase 4);
          'unsafe-inline' styles are required by MapLibre's injected styles.
          connect-src is an explicit allowlist — no wildcard https:. -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'sha256-W2WFH2+T7LHw/LY8j3NwAfximvYUToqraYOvJKGTymg='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src https: data: blob:; connect-src 'self' https://overpass-api.de https://overpass.kumi.systems https://api.cloudrf.com https://planetarycomputer.microsoft.com https://ows.digitalearth.africa https://s3.amazonaws.com https://tiles.mapterhorn.com https://data.source.coop https://jrc-ghsl.s3.amazonaws.com https://apps.fcc.gov https://www.fcc.gov https://fccid.io https://photon.komoot.io https://celestrak.org https://server.arcgisonline.com https://service.pdok.nl https://data.geopf.fr https://www.ign.es https://wmts.geo.admin.ch https://mapsneu.wien.gv.at https://mapy.geoportal.gov.pl https://wmts3.geoportail.lu https://geo.api.vlaanderen.be https://www.wms.nrw.de https://geoservices.bayern.de https://basemap.nationalmap.gov https://cyberjapandata.gsi.go.jp https://wmts.nlsc.gov.tw https://maps.six.nsw.gov.au https://tiles.maaamet.ee https://ags.cuzk.cz https://geodienste.sachsen.de https://tiles.maps.eox.at https://a.tile.opentopomap.org https://b.tile.opentopomap.org https://c.tile.opentopomap.org https://tile.openstreetmap.org https://tiles.openfreemap.org https://fonts.openmaptiles.org data: blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'"
+      content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'sha256-W2WFH2+T7LHw/LY8j3NwAfximvYUToqraYOvJKGTymg='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' https: data: blob:; connect-src 'self' https://overpass-api.de https://overpass.kumi.systems https://api.cloudrf.com https://planetarycomputer.microsoft.com https://ows.digitalearth.africa https://s3.amazonaws.com https://tiles.mapterhorn.com https://data.source.coop https://jrc-ghsl.s3.amazonaws.com https://apps.fcc.gov https://www.fcc.gov https://fccid.io https://photon.komoot.io https://celestrak.org https://server.arcgisonline.com https://services.arcgisonline.com https://wayback.maptiles.arcgis.com https://metadata.maptiles.arcgis.com https://s3-us-west-2.amazonaws.com https://service.pdok.nl https://data.geopf.fr https://www.ign.es https://wmts.geo.admin.ch https://mapsneu.wien.gv.at https://mapy.geoportal.gov.pl https://wmts3.geoportail.lu https://geo.api.vlaanderen.be https://www.wms.nrw.de https://geoservices.bayern.de https://basemap.nationalmap.gov https://cyberjapandata.gsi.go.jp https://wmts.nlsc.gov.tw https://maps.six.nsw.gov.au https://tiles.maaamet.ee https://ags.cuzk.cz https://geodienste.sachsen.de https://tiles.maps.eox.at https://a.tile.opentopomap.org https://b.tile.opentopomap.org https://c.tile.opentopomap.org https://tile.openstreetmap.org https://tiles.openfreemap.org https://fonts.openmaptiles.org https://api.mapbox.com https://authenticate.foundation.api.oneatlas.airbus.com https://access.foundation.api.oneatlas.airbus.com https://view.geoapi-airbusds.com https://*.pamdas.org ws://localhost:* ws://127.0.0.1:* ws://[::1]:* wss://localhost:* wss://127.0.0.1:* wss://[::1]:* data: blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'"
     />
     <!-- No-referrer: suppress Referer header on cross-origin requests. -->
     <meta name="referrer" content="no-referrer" />
@@ -34,9 +34,9 @@
     />
 
     <!-- Sora (display) + Hanken Grotesk (body). No Inter/Roboto/Arial. -->
-    <script type="module" crossorigin src="./assets/index-D4oedaeb.js"></script>
-    <link rel="modulepreload" crossorigin href="./assets/maplibre-KFe8a2y-.js">
-    <link rel="stylesheet" crossorigin href="./assets/index-CCfJH34_.css">
+    <script type="module" crossorigin src="./assets/index-DRwG7aA3.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/maplibre-Ewvzyz2e.js">
+    <link rel="stylesheet" crossorigin href="./assets/index-D2w1nbAW.css">
   </head>
   <body data-mode="user">
     <div class="app" id="app">
@@ -127,23 +127,7 @@
           </svg>
         </button>
 
-        <div class="toolbar__right" id="toolbarRight">
-          <button
-            class="btn btn--icon btn--ghost theme-toggle"
-            id="themeToggle"
-            type="button"
-            title="Toggle light / dark"
-            aria-label="Toggle light or dark theme"
-          >
-            <svg class="ico ico--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.6 6.6 0 0 0 9.8 9.8z" />
-            </svg>
-            <svg class="ico ico--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="4" />
-              <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
-            </svg>
-          </button>
-        </div>
+        <div class="toolbar__right" id="toolbarRight"></div>
       </header>
 
       <!-- ============================= PANEL ============================= -->
@@ -605,6 +589,10 @@
                 <input type="checkbox" id="useClutter" checked />
                 <span>Clutter — <span title="ESA WorldCover 2021, 10 m (CC-BY-4.0), worldwide via Microsoft Planetary Computer. Tree heights: Meta/WRI Canopy Height Map v2 (CC-BY-4.0) via source.coop. Building heights: GHSL GHS-BUILT-H 2018, European Commission JRC (CC-BY-4.0)">land cover, trees + buildings</span></span>
               </label>
+              <label class="check adv-flex">
+                <input type="checkbox" id="vegLoss" />
+                <span>Vegetation loss — <span title="ITU-R P.833-10: a bounded, frequency-dependent loss for the part of the path inside the canopy at a terminal under trees (FSPL + Deygout engine; P.1812 carries the canopy in its profile already). Spec: docs/E5-vegetation-loss.md">through the canopy at the handset (P.833)</span></span>
+              </label>
 
               <div class="input-row">
                 <div style="flex:1">
@@ -1051,7 +1039,9 @@
                 <button class="btn btn--block" type="button" id="exportKmzBtn">Export KMZ</button>
                 <button class="btn btn--block" type="button" id="exportGeojsonBtn">Export GeoJSON</button>
                 <button class="btn btn--block" type="button" id="exportTakBtn">Export TAK package</button>
-                <p class="help" id="dataExportHelp">GeoTIFF for QGIS, KMZ for Google Earth, GeoJSON for any GIS, CivTAK data package for ATAK. Raster exports carry the last coverage run; vector exports carry your sites, route, points, waypoints and AOI. Generated locally — nothing is uploaded.</p>
+                <button class="btn btn--block" type="button" id="pushTakBtn" hidden title="Send the plan to your TAK server (Connectors → TAK server). You confirm every push.">Push to TAK server…</button>
+                <p class="help" id="takLiveStatus" hidden></p>
+                <p class="help" id="dataExportHelp">GeoTIFF for QGIS, KMZ for Google Earth, GeoJSON for any GIS, CivTAK data package for ATAK. Raster exports carry the last coverage run; vector exports carry your sites, route, points, waypoints and AOI. Generated locally — nothing is uploaded (only <em>Push to TAK server…</em> sends anything, after you confirm).</p>
               </div>
               <!-- Mission file (M21) — save / open the whole mission -->
               <div class="export-mission">
@@ -1065,7 +1055,7 @@
           <!-- Typed map features -->
           <section class="section" aria-labelledby="featTitle">
             <div class="section__head">
-              <span class="section__title" id="featTitle">Layers</span>
+              <span class="section__title" id="featTitle">Map key</span>
             </div>
             <div class="section__body">
               <div class="legend">
@@ -1128,6 +1118,11 @@
             </svg>
           </button>
           <span class="map-rail__sep" aria-hidden="true"></span>
+          <button class="map-rail__btn" type="button" id="railLayersBtn" aria-label="Mission layers — show or hide groups of data" aria-haspopup="true" aria-expanded="false" title="Mission layers — the Layers tab in the right column (L)">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 6h2" /><path d="M9 6h11" /><path d="M4 12h2" /><path d="M9 12h11" /><path d="M4 18h2" /><path d="M9 18h11" />
+            </svg>
+          </button>
           <button class="map-rail__btn" type="button" id="railBasemapBtn" aria-label="Basemap and variants" aria-haspopup="true" aria-expanded="false" aria-controls="railFlyoutBasemap" title="Basemap &amp; variants">
             <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M12 3l9 5-9 5-9-5 9-5z" /><path d="M3 13l9 5 9-5" />
@@ -1136,6 +1131,11 @@
           <button class="map-rail__btn" type="button" id="railViewBtn" aria-label="View — 3D, buildings, tilt, operation time" aria-haspopup="true" aria-expanded="false" aria-controls="railFlyoutView" title="View — 3D, buildings, tilt, op time">
             <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M3 18l5.5-8 4 5.5L16 11l5 7H3z" /><path d="M16 5.5h.01" />
+            </svg>
+          </button>
+          <button class="map-rail__btn" type="button" id="railConnectorsBtn" aria-label="Connectors — outside services, keys and what data leaves the browser" aria-haspopup="true" aria-expanded="false" aria-controls="railFlyoutConnectors" title="Connectors — imagery, engines, live services; keys and data flow">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 7V4" /><path d="M15 7V4" /><path d="M6 7h12v4a6 6 0 0 1-12 0z" /><path d="M12 17v3" />
             </svg>
           </button>
           <button class="map-rail__btn" type="button" id="railDataBtn" aria-label="Data sources and offline" aria-haspopup="true" aria-expanded="false" aria-controls="railFlyoutData" title="Data — local COGs, PMTiles buildings, offline AOI">
@@ -1190,6 +1190,8 @@
             <button class="basemap-switch__btn" type="button" data-basemap="topo" title="Topographic map">Topo</button>
           </div>
           <div class="basemap-variant-menu" id="basemapVariantMenu" role="group" aria-label="Basemap variants"></div>
+          <!-- Esri Wayback: details of the imagery at the map centre + sharpest archived version (src/ui/imagery-here.js) -->
+          <div id="imageryHere" role="group" aria-label="Imagery here" hidden></div>
         </div>
 
         <!-- View flyout: 3D, buildings, tilt/bearing, operation date/time. -->
@@ -1198,6 +1200,10 @@
           <div class="map-flyout__row">
             <button class="map-flyout__toggle" type="button" id="toggle3d" aria-label="Toggle 3D terrain relief" aria-pressed="false" title="3D terrain relief (tilt + pitch)">3D terrain</button>
             <button class="map-flyout__toggle" type="button" id="toggleBuildings" aria-label="Toggle building render" aria-pressed="false" title="Extruded buildings on / off">Buildings</button>
+          </div>
+          <div class="map-flyout__row">
+            <button class="map-flyout__toggle" type="button" id="toggleRealistic" aria-pressed="false" title="Realistic 3D: textured buildings and roofs, trees, masts and the sun at the mission time with shadows. Heavier on the graphics card; quality adapts.">Realistic 3D</button>
+            <span class="help" id="realisticQuality" hidden></span>
           </div>
           <div class="view-sliders" id="viewSliders" role="group" aria-label="3D view controls" hidden>
             <div class="view-slider">
@@ -1211,12 +1217,26 @@
               <span class="view-slider__val" id="bearingVal" data-numeric>0° N</span>
             </div>
           </div>
+          <div class="map-flyout__field">
+            <label class="field-label" for="trackpadMode" title="Two fingers pan, pinch zooms, Shift + two fingers turn and tilt. A mouse wheel keeps zooming.">Trackpad gestures</label>
+            <select class="input" id="trackpadMode" aria-label="Trackpad gestures">
+              <option value="auto">Auto (detect trackpad)</option>
+              <option value="on">Always on</option>
+              <option value="off">Off (wheel zooms)</option>
+            </select>
+          </div>
           <!-- Operation date/time → day/night sky position -->
           <div class="map-flyout__field">
             <label class="field-label" for="opDatetime" title="Operation date/time — sets sun position for day/night sky">Operation date &amp; time</label>
             <input class="map-flyout__datetime" type="datetime-local" id="opDatetime"
               aria-label="Operation date and time" title="Operation date/time (drives sun position + day/night)" />
           </div>
+        </div>
+
+        <!-- M56: Connectors flyout — every outside service, its status, keys and data flow. -->
+        <div class="map-flyout map-flyout--wide" id="railFlyoutConnectors" role="group" aria-label="Connectors" hidden>
+          <div class="map-flyout__title">Connectors</div>
+          <div id="connectorsMenu"></div>
         </div>
 
         <!-- E1: Data flyout — local COG samplers, PMTiles buildings, offline AOI. -->
@@ -1241,6 +1261,33 @@
             <label class="field-label" for="elevationCogInput" title="Elevation GeoTIFF (e.g. Copernicus GLO-30 tile) — read locally, never uploaded">Elevation COG (local file)</label>
             <input class="input" id="elevationCogInput" type="file" accept=".tif,.tiff,image/tiff" aria-label="Load a local elevation COG" />
             <p class="help" id="elevationCogStatus">Overrides AWS terrain where the file has data.</p>
+          </div>
+
+          <div class="map-flyout__field">
+            <label class="field-label" for="orthoInput" title="RGB GeoTIFF from a drone survey (WGS 84, Web Mercator or UTM) — drawn over the imagery, read locally, never uploaded">Drone ortho (local file)</label>
+            <input class="input" id="orthoInput" type="file" accept=".tif,.tiff,image/tiff" aria-label="Load a local drone ortho GeoTIFF" />
+            <div class="map-flyout__row">
+              <button class="map-flyout__toggle" type="button" id="orthoZoomBtn" hidden title="Fly to the ortho">Show</button>
+              <button class="map-flyout__toggle" type="button" id="orthoClearBtn" hidden title="Remove the ortho from the map">Clear</button>
+            </div>
+            <p class="help" id="orthoStatus">RGB GeoTIFF drawn over the imagery — decoded in-browser, never uploaded.</p>
+          </div>
+
+          <div class="map-flyout__field" id="patrolField" hidden>
+            <label class="field-label" for="patrolPeriod" title="Read-only: patrol tracks and events from EarthRanger / SMART into the mission overlay">Patrol data</label>
+            <div class="map-flyout__row">
+              <select class="input" id="patrolSource" aria-label="Patrol data source"></select>
+              <select class="input" id="patrolPeriod" aria-label="Patrol data period">
+                <option value="1">Last 24 hours</option>
+                <option value="7" selected>Last 7 days</option>
+                <option value="30">Last 30 days</option>
+                <option value="90">Last 90 days</option>
+              </select>
+            </div>
+            <div class="map-flyout__row">
+              <button class="map-flyout__toggle" type="button" id="patrolLoadBtn" title="Load patrol tracks and events for the area of interest (or the view) into the mission overlay">Load into the mission</button>
+            </div>
+            <p class="help" id="patrolStatus">Patrol tracks and events for the area of interest (or the view), read-only. They go into the mission overlay and the mission file — treat that file as sensitive.</p>
           </div>
 
           <div class="map-flyout__field">

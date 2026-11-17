@@ -1,0 +1,202 @@
+{
+  "metal": {
+    "polyhavenId": "worn_corrugated_iron",
+    "name": "Worn Corrugated Iron",
+    "authors": [
+      "Jenelle van Heerden",
+      "Dimitrios Savva"
+    ],
+    "url": "https://polyhaven.com/a/worn_corrugated_iron",
+    "licence": "CC0",
+    "maps": [
+      "diff",
+      "nor",
+      "rough"
+    ],
+    "metresPerRepeat": 1.8
+  },
+  "plaster": {
+    "polyhavenId": "white_stucco_02",
+    "name": "White Stucco 02",
+    "authors": [
+      "Dimitrios Savva"
+    ],
+    "url": "https://polyhaven.com/a/white_stucco_02",
+    "licence": "CC0",
+    "maps": [
+      "diff",
+      "nor",
+      "rough"
+    ],
+    "metresPerRepeat": 1.8
+  },
+  "brick": {
+    "polyhavenId": "large_red_bricks",
+    "name": "Large Red Bricks",
+    "authors": [
+      "Rob Tuytel"
+    ],
+    "url": "https://polyhaven.com/a/large_red_bricks",
+    "licence": "CC0",
+    "maps": [
+      "diff",
+      "nor",
+      "rough"
+    ],
+    "metresPerRepeat": 0.7
+  },
+  "thatch": {
+    "polyhavenId": "riet_01",
+    "name": "Riet 01",
+    "authors": [
+      "Rob Tuytel"
+    ],
+    "url": "https://polyhaven.com/a/riet_01",
+    "licence": "CC0",
+    "maps": [
+      "diff",
+      "nor",
+      "rough"
+    ],
+    "metresPerRepeat": 2.5
+  },
+  "canvas": {
+    "polyhavenId": "hessian_380",
+    "name": "Hessian 380",
+    "authors": [
+      "colormass",
+      "Rico Cilliers"
+    ],
+    "url": "https://polyhaven.com/a/hessian_380",
+    "licence": "CC0",
+    "maps": [
+      "diff",
+      "nor",
+      "rough"
+    ],
+    "metresPerRepeat": 0.27
+  },
+  "bark": {
+    "polyhavenId": "bark_brown_02",
+    "name": "Bark Brown 02",
+    "authors": [
+      "Rob Tuytel"
+    ],
+    "url": "https://polyhaven.com/a/bark_brown_02",
+    "licence": "CC0",
+    "maps": [
+      "diff",
+      "nor",
+      "rough"
+    ],
+    "metresPerRepeat": 1.0
+  },
+  "foliage": {
+    "polyhavenId": "forest_leaves_03",
+    "name": "Forest Leaves 03",
+    "authors": [
+      "Rob Tuytel",
+      "Dimitrios Savva"
+    ],
+    "url": "https://polyhaven.com/a/forest_leaves_03",
+    "licence": "CC0",
+    "maps": [
+      "diff",
+      "nor",
+      "rough"
+    ],
+    "metresPerRepeat": 2.3
+  },
+  "paint": {
+    "polyhavenId": "green_metal_rust",
+    "name": "Green Metal Rust",
+    "authors": [
+      "Rob Tuytel"
+    ],
+    "url": "https://polyhaven.com/a/green_metal_rust",
+    "licence": "CC0",
+    "maps": [
+      "diff",
+      "nor",
+      "rough"
+    ],
+    "metresPerRepeat": 1.0
+  },
+  "concrete": {
+    "polyhavenId": "concrete_floor_worn_001",
+    "name": "Concrete Floor Worn 001",
+    "authors": [
+      "Dimitrios Savva",
+      "Rico Cilliers"
+    ],
+    "url": "https://polyhaven.com/a/concrete_floor_worn_001",
+    "licence": "CC0",
+    "maps": [
+      "diff",
+      "nor",
+      "rough"
+    ],
+    "metresPerRepeat": 3.0
+  },
+  "earth": {
+    "polyhavenId": "red_laterite_soil_stones",
+    "name": "Red Laterite Soil Stones",
+    "authors": [
+      "Amal Kumar"
+    ],
+    "url": "https://polyhaven.com/a/red_laterite_soil_stones",
+    "licence": "CC0",
+    "maps": [
+      "diff",
+      "nor",
+      "rough"
+    ],
+    "metresPerRepeat": 2.5
+  },
+  "grass": {
+    "polyhavenId": "sparse_grass",
+    "name": "Sparse Grass",
+    "authors": [
+      "Amal Kumar"
+    ],
+    "url": "https://polyhaven.com/a/sparse_grass",
+    "licence": "CC0",
+    "maps": [
+      "diff",
+      "nor",
+      "rough"
+    ],
+    "metresPerRepeat": 2.5
+  },
+  "stone": {
+    "polyhavenId": "rustic_stone_wall",
+    "name": "Rustic Stone Wall",
+    "authors": [
+      "Dimitrios Savva"
+    ],
+    "url": "https://polyhaven.com/a/rustic_stone_wall",
+    "licence": "CC0",
+    "maps": [
+      "diff",
+      "nor",
+      "rough"
+    ],
+    "metresPerRepeat": 1.6
+  },
+  "planks": {
+    "polyhavenId": "weathered_planks",
+    "name": "Weathered Planks",
+    "authors": [
+      "Dario Barresi",
+      "Dimitrios Savva"
+    ],
+    "url": "https://polyhaven.com/a/weathered_planks",
+    "licence": "CC0",
+    "maps": [
+      "diff",
+      "nor",
+      "rough"
+    ],
+    "metresPerRepeat": 2.0
+  }
+}

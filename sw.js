@@ -24,7 +24,7 @@
 // which is what makes the browser install the new worker at all — the old
 // byte-stable SW was why users kept seeing stale builds. In dev / unbuilt
 // copies the placeholder survives; collapse it to 'dev'.
-let BUILD_ID = '0.10.4-beta+dev';
+let BUILD_ID = '0.11.0-beta+dev';
 if (BUILD_ID.includes('GL_BUILD_ID')) BUILD_ID = 'dev';
 
 // Shell cache is per-build: the activate step deletes every other groundlink
@@ -45,7 +45,7 @@ const scoped = (path) => new URL(path, self.registration.scope).toString();
 
 // Minimal shell. The hashed Vite assets are appended at install time from
 // the build-generated sw-assets.json manifest.
-const APP_SHELL_URLS = ['.', 'index.html', 'manifest.webmanifest'];
+const APP_SHELL_URLS = ['.', 'index.html', 'manifest.webmanifest', 'itm/itm.js', 'itm/itm.wasm']; // M56 phase 4: the local ITM engine works offline
 
 // Tile providers (basemaps + DEM) — matched against request hostnames/paths.
 const TILE_HOST_PATTERNS = [
@@ -81,8 +81,41 @@ const TILE_HOST_PATTERNS = [
 // caching its tiles for offline use as a licensed use, so these go straight to
 // the network: no cache.put, no stale copy, nothing served when offline. The
 // activate step also deletes anything an older build stored.
-const NO_STORE_HOST_PATTERNS = [/(^|\.)arcgisonline\.com$/];
-const isNoStore = (url) => NO_STORE_HOST_PATTERNS.some((re) => re.test(url.hostname));
+// M53: Esri Wayback releases and their metadata are the same imagery under Esri's terms.
+// M56 phase 5: every connector whose licence says `offline: false` is here —
+// Esri (World Imagery, Wayback), Airbus OneAtlas, Mapbox, CloudRF, Photon
+// (src/connectors/imagery-addons.test.js checks this list against the registry).
+// Hosts the user types in (a custom XYZ / WMTS server) arrive at run time
+// from the page (GL_NO_STORE_HOSTS) and are kept in the gl-meta cache.
+const NO_STORE_HOST_PATTERNS = [
+  /(^|\.)arcgisonline\.com$/, /(^|\.)maptiles\.arcgis\.com$/,
+  /(^|\.)airbus\.com$/, /(^|\.)geoapi-airbusds\.com$/,
+  /(^|\.)mapbox\.com$/,
+  /^api\.cloudrf\.com$/,
+  /^photon\.komoot\.io$/,
+];
+const dynamicNoStore = new Set();
+const META_CACHE = 'gl-meta';
+const META_KEY = 'no-store-hosts';
+const isNoStore = (url) => NO_STORE_HOST_PATTERNS.some((re) => re.test(url.hostname)) || dynamicNoStore.has(url.hostname);
+// Restore the run-time list after the worker was stopped and restarted.
+caches.open(META_CACHE).then((c) => c.match(META_KEY)).then((r) => r?.json()).then((hosts) => {
+  for (const h of hosts ?? []) if (typeof h === 'string') dynamicNoStore.add(h);
+}).catch(() => {});
+self.addEventListener('message', (event) => {
+  if (event.data?.type !== 'GL_NO_STORE_HOSTS' || !Array.isArray(event.data.hosts)) return;
+  const fresh = event.data.hosts.filter((h) => typeof h === 'string' && /^[a-z0-9.-]{1,253}$/i.test(h)).map((h) => h.toLowerCase()).filter((h) => !dynamicNoStore.has(h));
+  if (!fresh.length) return;
+  for (const h of fresh) dynamicNoStore.add(h);
+  event.waitUntil?.((async () => {
+    const c = await caches.open(META_CACHE);
+    await c.put(META_KEY, new Response(JSON.stringify([...dynamicNoStore]), { headers: { 'Content-Type': 'application/json' } }));
+    // Anything an earlier session cached from these hosts goes.
+    const tiles = await caches.open(TILE_CACHE).catch(() => null);
+    const added = new Set(fresh); // only the newly added hosts: the rest was purged when it arrived
+    if (tiles) for (const req of await tiles.keys()) if (added.has(new URL(req.url).hostname)) await tiles.delete(req);
+  })());
+});
 
 // DEM tiles live on a shared S3 host, so match by path as well as host.
 const TILE_PATH_PATTERNS = [/elevation-tiles-prod/];
@@ -130,7 +163,7 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
-      const keep = new Set([APP_SHELL_CACHE, TILE_CACHE]);
+      const keep = new Set([APP_SHELL_CACHE, TILE_CACHE, META_CACHE]); // gl-meta: the run-time no-store hosts
       const names = await caches.keys();
       await Promise.all(names.filter((n) => !keep.has(n)).map((n) => caches.delete(n)));
       // Older builds cached Esri tiles; remove them (see NO_STORE_HOST_PATTERNS).
