@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>P.1812 validation · GroundLink</title>
+<meta name="description" content="How GroundLink's in-browser ITU-R P.1812 engine compares with the official ITU validation set, step by step." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" />
+<style>
+  /* Tokens mirror styles/tokens.css (light default, dark by OS or data-theme). */
+  :root {
+    --bg: #f4f6f9; --surface: #ffffff; --surface2: #fafbfd; --raise: #f0f3f7;
+    --hair: #e5e8ef; --hair2: #d6dce5;
+    --ink: #0f141b; --dim: #586273; --faint: #929cac;
+    --accent: #0a8475; --accent2: #2a7fe0; --warn: #cf8a16; --ok: #0a8475;
+    --disp: 'Sora', system-ui, sans-serif; --ui: 'Hanken Grotesk', system-ui, sans-serif;
+    --r: 14px;
+    --shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 12px 30px -16px rgba(16, 24, 40, 0.18);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0b0d12; --surface: #13161e; --surface2: #171b24; --raise: #1c212c;
+      --hair: rgba(255, 255, 255, 0.08); --hair2: rgba(255, 255, 255, 0.15);
+      --ink: #eef0f5; --dim: #a6adbe; --faint: #6c7490;
+      --accent: #34e6c2; --accent2: #46b6ff; --warn: #ffd479; --ok: #34e6c2;
+      --shadow: 0 22px 48px -22px rgba(0, 0, 0, 0.7);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0b0d12; --surface: #13161e; --surface2: #171b24; --raise: #1c212c;
+    --hair: rgba(255, 255, 255, 0.08); --hair2: rgba(255, 255, 255, 0.15);
+    --ink: #eef0f5; --dim: #a6adbe; --faint: #6c7490;
+    --accent: #34e6c2; --accent2: #46b6ff; --warn: #ffd479; --ok: #34e6c2;
+    --shadow: 0 22px 48px -22px rgba(0, 0, 0, 0.7);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 var(--ui); }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 28px 16px 64px; }
+  a { color: var(--accent); }
+  .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 28px; }
+  .brand { font: 600 15px var(--disp); color: var(--ink); text-decoration: none; }
+  .brand span { color: var(--accent); }
+  .top a.back { font-size: 14px; }
+  h1 { font: 600 30px/1.2 var(--disp); margin: 0 0 6px; letter-spacing: -0.01em; }
+  h2 { font: 600 19px/1.3 var(--disp); margin: 40px 0 10px; }
+  .sub { color: var(--dim); margin: 0 0 22px; }
+  .lead { font-size: 18px; margin: 0 0 22px; max-width: 64ch; }
+  p { max-width: 70ch; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+  .tile { background: var(--surface); border: 1px solid var(--hair); border-radius: var(--r); padding: 16px; box-shadow: var(--shadow); }
+  .tile b { display: block; font: 600 28px/1.1 var(--disp); font-variant-numeric: tabular-nums; }
+  .tile span { color: var(--dim); font-size: 13.5px; }
+  .card { background: var(--surface); border: 1px solid var(--hair); border-radius: var(--r); box-shadow: var(--shadow); }
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--hair); vertical-align: top; }
+  th { color: var(--dim); font-weight: 600; font-size: 13px; white-space: nowrap; }
+  tr:last-child td { border-bottom: 0; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.ok { color: var(--ok); font-weight: 600; }
+  .muted { color: var(--dim); }
+  .causes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin: 14px 0; }
+  .cause { padding: 14px 16px; }
+  .cause h3 { font: 600 15px var(--disp); margin: 0 0 6px; display: flex; align-items: center; gap: 8px; }
+  .cause p { margin: 0; font-size: 14px; color: var(--dim); }
+  details { margin-top: 14px; }
+  summary { cursor: pointer; font-weight: 600; color: var(--accent); padding: 4px 0; }
+  code { font-size: 13px; background: var(--raise); padding: 1px 5px; border-radius: 5px; }
+  pre { background: var(--raise); padding: 12px 14px; border-radius: 10px; overflow-x: auto; font-size: 13px; }
+  footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--hair); color: var(--dim); font-size: 13px; }
+  .error { color: var(--warn); }
+  .empty { padding: 16px; color: var(--dim); }
+  .empty ol { margin: 8px 0 0; padding-left: 20px; }
+  .dataset { margin-top: 12px; }
+  .dataset h3 { font: 600 15px var(--disp); margin: 0; padding: 14px 16px 2px; }
+  .dataset p { margin: 0; padding: 0 16px 10px; color: var(--dim); font-size: 13.5px; }
+  @media (max-width: 560px) {
+    h1 { font-size: 25px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="brand" href="../">Ground<span>Link</span></a>
+    <a class="back" href="../">Open the planner</a>
+  </div>
+
+  <h1>P.1812 validation</h1>
+  <p class="sub" id="sub">Against the official ITU-R P.1812 validation set</p>
+  <p class="lead" id="lead">Loading results…</p>
+
+  <div class="tiles" id="tiles"></div>
+
+  <h2>Step by step</h2>
+  <p>Each test case runs through the same stages as the Recommendation. For every stage the ITU reference logs its result, so we compare stage by stage and see where any difference starts. Deviation is GroundLink minus reference, in dB.</p>
+  <div class="card scroll"><table id="stages"></table></div>
+
+  <h2>Where the final loss differs</h2>
+  <p id="diffIntro"></p>
+  <div class="card cause">
+    <h3>No ducting</h3>
+    <p>GroundLink leaves out ducting and layer reflection (P.1812 §4.4). It only matters for small time percentages, where the atmosphere can bend signals far beyond normal range. Leaving it out predicts more loss, which is the safe side for planning.</p>
+  </div>
+  <div class="card scroll" style="margin-top: 12px"><table id="differ"></table></div>
+  <details>
+    <summary>All test cases</summary>
+    <div class="card scroll" style="margin-top: 10px"><table id="cases"></table></div>
+  </details>
+
+  <h2>How it was run</h2>
+  <p>The ITU-R Working Party 3M validation set has 19 terrain profiles and 63 test cases: land, sea and mixed paths of 1 to 235 km, 30 MHz to 6 GHz, 1 to 50% of time, horizontal and vertical polarisation, with and without clutter. Every case runs through GroundLink's own engine (<code>src/coverage/p1812.js</code>, the code the coverage map uses) with the reference's inputs: frequency, time percentage, antenna heights, polarisation, refractivity (ΔN, N₀), path-centre latitude, sea fraction and land stretches, terrain and clutter heights. Location variability is off (pL = 50%, σL = 0), as in the reference.</p>
+  <p>The profiles themselves are not published here, and neither are coordinates or terrain heights. This page holds only the deviations. To reproduce, download the validation set and run:</p>
+  <pre>node scripts/validate-p1812.mjs /path/to/Py1812/tests</pre>
+  <p>The engine is a P.1812-6 core whose path geometry (horizon angles, angular distance, multipath distances, smooth-earth correction) and clutter at the antennas follow P.1812-8. That alignment came out of this validation. Before it, diffraction on cluttered paths differed by up to 8 dB, troposcatter by up to 111 dB, and the older separate clutter loss at the antennas added up to 57 dB in urban cases.</p>
+  <p>P.1812-8 counts clutter next to an antenna through the terrain profile. The coverage map therefore samples each path densely near both antennas (25 to 400 m), so the trees and buildings around a handheld radio still block it.</p>
+
+  <h2>Field measurements</h2>
+  <p>The ITU comparison proves the calculation. Whether the map predicts real signals is a different question, answered by measurements: each dataset below compares measured signal levels with what the map predicted at the same spots, for four model set-ups. Error is model minus measured; a plus means the map promised more signal than was there.</p>
+  <div id="field"></div>
+
+  <h2>What this does and does not show</h2>
+  <p>The ITU comparison shows that GroundLink computes P.1812 the way the reference does, to a thousandth of a dB, and where it deliberately departs from it. Field datasets show how well the map matches real signals, but only for the places, radios and seasons they were measured in.</p>
+
+  <footer>
+    Reference: ITU-R P.1812 validation profiles and results, ITU-R Working Party 3M, via the reference implementation by Ivica Stevanovic (OFCOM, Switzerland), <a href="https://github.com/eeveetza/Py1812">github.com/eeveetza/Py1812</a>. Results generated <span id="gen">—</span>.
+  </footer>
+</div>
+
+<script>
+(async function () {
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const fmt = (v, d = 2) => (v == null ? '—' : (Math.abs(v) < 0.0005 ? '0.00' : v.toFixed(d)));
+  let data;
+  try {
+    const res = await fetch('p1812.json', { cache: 'no-cache' });
+    data = await res.json();
+  } catch (e) {
+    $('lead').innerHTML = '<span class="error">The results file could not be loaded.</span>';
+    return;
+  }
+  const S = data.summary;
+  const n = data.count;
+  const stages = [
+    ['Lbfs', 'Free-space loss'],
+    ['Lb0p', 'Free space + multipath / focusing'],
+    ['Ld50', 'Diffraction, median'],
+    ['Ldp', 'Diffraction, p % time'],
+    ['Lbs', 'Troposcatter'],
+  ];
+  const exactStages = stages.filter(([k]) => S[k].maxAbs < 0.001).length;
+  const differ = data.cases.filter((c) => Math.abs(c.dev.Lb) > 0.1);
+
+  $('gen').textContent = data.generated;
+  $('sub').textContent = `Against the official ITU-R P.1812 validation set · ${n} test cases · ${data.generated}`;
+  $('lead').textContent = exactStages === stages.length
+    ? `Every calculation step matches the ITU reference to within 0.001 dB in all ${n} test cases. The final loss matches in ${n - differ.length}; the ${differ.length} others differ because ducting is left out, always towards more loss.`
+    : `${exactStages} of ${stages.length} calculation steps match the ITU reference to within 0.001 dB in all ${n} test cases.`;
+
+  const tiles = [
+    [n, 'test cases from ITU-R WP 3M'],
+    [`${exactStages}/${stages.length}`, 'calculation steps within 0.001 dB'],
+    [`${S.Lb.within01}/${n}`, 'final loss within 0.1 dB'],
+    [differ.length, `differ, all towards more loss`],
+  ];
+  $('tiles').innerHTML = tiles.map(([v, l]) => `<div class="tile"><b>${esc(v)}</b><span>${esc(l)}</span></div>`).join('');
+
+  const row = (k, label) => {
+    const s = S[k];
+    const exact = s.maxAbs < 0.001;
+    return `<tr><td>${esc(label)} <span class="muted">(${k})</span></td>` +
+      `<td class="n">${fmt(s.mean)}</td><td class="n">${fmt(s.rms)}</td>` +
+      `<td class="n${exact ? ' ok' : ''}">${exact ? '&lt; 0.001' : fmt(s.maxAbs)}</td><td class="n">${s.within01}/${n}</td></tr>`;
+  };
+  $('stages').innerHTML = '<thead><tr><th>Stage</th><th class="n">Mean</th><th class="n">RMS</th><th class="n">Max |Δ|</th><th class="n">Within 0.1 dB</th></tr></thead><tbody>' +
+    stages.map(([k, l]) => row(k, l)).join('') +
+    row('Lb', 'Final basic transmission loss') + '</tbody>';
+
+  $('diffIntro').textContent = `In ${differ.length} of ${n} cases the final loss differs by more than 0.1 dB, all for the same reason, and GroundLink predicts more loss than the reference in each.`;
+  $('differ').innerHTML = '<thead><tr><th>Case</th><th class="n">km</th><th class="n">MHz</th><th class="n">Time %</th><th class="n">ΔLb (dB)</th></tr></thead><tbody>' +
+    differ.map((c) => `<tr><td>${esc(c.id)}</td><td class="n">${c.dKm}</td><td class="n">${c.fMHz}</td><td class="n">${c.p}</td><td class="n">+${c.dev.Lb.toFixed(2)}</td></tr>`).join('') + '</tbody>';
+
+  $('cases').innerHTML = '<thead><tr><th>Case</th><th class="n">km</th><th class="n">MHz</th><th class="n">Time %</th><th>Pol.</th><th class="n">Sea</th>' +
+    '<th class="n">ΔLbfs</th><th class="n">ΔLd50</th><th class="n">ΔLdp</th><th class="n">ΔLbs</th><th class="n">ΔLb</th></tr></thead><tbody>' +
+    data.cases.map((c) => `<tr><td>${esc(c.id)}</td><td class="n">${c.dKm}</td><td class="n">${c.fMHz}</td><td class="n">${c.p}</td><td>${c.pol.toUpperCase()}</td>` +
+      `<td class="n">${Math.round(c.seaFrac * 100)}%</td><td class="n">${fmt(c.dev.Lbfs)}</td><td class="n">${fmt(c.dev.Ld50)}</td><td class="n">${fmt(c.dev.Ldp)}</td>` +
+      `<td class="n">${fmt(c.dev.Lbs)}</td><td class="n">${fmt(c.dev.Lb)}</td></tr>`).join('') + '</tbody>';
+
+  // Field datasets (validation part 2): statistics only, from the app's
+  // "Export validation summary".
+  let field = { datasets: [] };
+  try {
+    field = await (await fetch('field.json', { cache: 'no-cache' })).json();
+  } catch (e) { /* no file yet */ }
+  const sets = Array.isArray(field.datasets) ? field.datasets : [];
+  const signed = (v) => (v == null ? '—' : `${v > 0 ? '+' : ''}${v.toFixed(1)}`);
+  $('field').innerHTML = sets.length
+    ? sets.map((d) => {
+      const st = d.setting || {};
+      const km = d.distanceKm ? `${d.distanceKm.min}–${d.distanceKm.max} km (median ${d.distanceKm.median})` : '';
+      const rows = (d.engines || []).map((e) => e.n
+        ? `<tr><td>${esc(e.label)}</td><td class="n">${signed(e.biasDb)}</td><td class="n">${fmt(e.rmseDb, 1)}</td><td class="n">${e.withinPct}%</td><td class="n">${e.optimisticPct}%</td></tr>`
+        : `<tr><td>${esc(e.label)}</td><td class="n" colspan="4">not run</td></tr>`).join('');
+      return `<div class="card dataset"><h3>${esc(d.label || 'Field dataset')}</h3>` +
+        `<p>${d.points} measurements · ${st.freqMHz} MHz · ${st.txCount} transmitter${st.txCount === 1 ? '' : 's'} · ${km} · ${esc(d.generated)}</p>` +
+        `<div class="scroll"><table><thead><tr><th>Model</th><th class="n">Bias (dB)</th><th class="n">RMSE (dB)</th><th class="n">Within ±6 dB</th><th class="n">Too optimistic</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+    }).join('')
+    : `<div class="card empty">No field datasets published yet. To add one:<ol>` +
+      `<li>In the planner, set up the mission with your real transmitter and radio.</li>` +
+      `<li>Coverage → Calibration → import your measurements (CSV with lat, lon, dBm).</li>` +
+      `<li>Use <b>Export validation summary</b>. It holds statistics only, no coordinates.</li>` +
+      `<li>Add the file's contents to <code>public/validation/field.json</code> under <code>datasets</code>.</li></ol></div>`;
+})();
+</script>
+</body>
+</html>

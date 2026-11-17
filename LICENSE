@@ -1,0 +1,18 @@
+Copyright (c) 2026 GroundLink. All rights reserved.
+
+The GroundLink Comms Coverage Planner and the GroundLink website are made
+available for use through https://app.groundlink.org and https://groundlink.org.
+You may use the application for your own planning work. You may not copy,
+modify, redistribute, sublicense or sell the application or any part of it
+without prior written permission from GroundLink.
+
+The application is a planning aid. Coverage predictions are estimates based on
+terrain data and propagation models. They do not guarantee radio coverage in
+the field and must be verified before operational use.
+
+The application is provided "as is", without warranty of any kind. To the
+extent permitted by law, GroundLink is not liable for any damage arising from
+its use.
+
+Third-party open-source components included in the application remain under
+their own licences.
