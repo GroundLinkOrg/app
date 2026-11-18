@@ -24,7 +24,7 @@
 // which is what makes the browser install the new worker at all — the old
 // byte-stable SW was why users kept seeing stale builds. In dev / unbuilt
 // copies the placeholder survives; collapse it to 'dev'.
-let BUILD_ID = '0.11.1-beta+dev';
+let BUILD_ID = '0.12.0-beta+847e10a';
 if (BUILD_ID.includes('GL_BUILD_ID')) BUILD_ID = 'dev';
 
 // Shell cache is per-build: the activate step deletes every other groundlink
